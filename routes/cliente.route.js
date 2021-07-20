@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const Cliente = require('../models/cliente.model');
 const Endereco = require('../models/endereco.model');
-const Cartao = require('../models/cartao.model');
 
 router.get('/', async (req, res) => {
   try {
@@ -77,9 +76,8 @@ router.post('/', async (req, res) => {
       complemento: endereco.complemento,
       cidade: endereco.cidade,
       uf: endereco.uf });
-    const cartao = await Cartao.create({});
     const { nome, telefone } = req.body;
-    const cliente = await Cliente.create({ nome, endereco, telefone, cartao });
+    const cliente = await Cliente.create({ nome, endereco, telefone });
     return res.status(201).send({ cliente });
   } catch (error) {
     return res.status(500).send({ error });

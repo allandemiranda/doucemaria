@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
-const Cartao = require('../models/cartao.model');
+const Cliente = require('../models/cliente.model');
 
 router.get('/', async (req, res) => {
     try {
-        const cartoes = await Cartao.find();
+        const clientes = await Cliente.find();
+
+        const cartoes = await clientes.map(value => {
+            return {
+                numero: value.cartao,
+                quantidade: value.compras.length
+            }
+        });
         return res.status(200).send({ cartoes });
     } catch (error) {
         return res.status(500).send({ error });
@@ -14,22 +21,17 @@ router.get('/', async (req, res) => {
 router.get('/:numero', async (req, res) => {
     try {
         const { numero } = req.params;
-        const cartoes = await Cartao.find({numero});
-        if (cartoes.length == 1) {
-            const cartao = cartoes[0];
-            return res.status(200).send({ cartao });
-        } else {
-            return res.status(400).send({ error: 'Não existe' });
-        }
-    } catch (error) {
-        return res.status(500).send({ error });
-    }
-});
+        const clientes = await Cliente.find();
 
-router.get('/id/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const cartao = await Cartao.findById(id);
+        const cartoes = await clientes.map(value => {
+            return {
+                numero: value.cartao,
+                quantidade: value.compras.length
+            }
+        });
+
+        const cartao = await cartoes.find(value => value.numero==numero);
+
         if (cartao) {
             return res.status(200).send({ cartao });
         } else {

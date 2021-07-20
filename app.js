@@ -9,7 +9,6 @@ var authRouter = require('./routes/auth.route');
 var cartaoRouter = require('./routes/cartao.route');
 var clienteRouter = require('./routes/cliente.route');
 var compraRouter = require('./routes/compra.route');
-var produtoRouter = require('./routes/produto.route');
 
 var app = express();
 
@@ -20,9 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
 app.use('/cartao', cartaoRouter);
-app.use('/cliente', authMiddleware, clienteRouter);
-app.use('/compra', authMiddleware, compraRouter);
-app.use('/produto', authMiddleware, produtoRouter);
+app.use('/cliente', clienteRouter);
+app.use('/compra', compraRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
